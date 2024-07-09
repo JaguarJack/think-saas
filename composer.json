@@ -19,5 +19,12 @@
             "email": "njphper@gmail.com"
         }
     ],
+    "extra": {
+        "think": {
+            "services": [
+                "think\\saas\\SaasService"
+            ]
+        }
+    },
     "minimum-stability": "dev"
 }
