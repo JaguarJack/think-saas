@@ -1,0 +1,23 @@
+{
+    "name": "think/saas",
+    "description": "a saas package for thinkphp 8.0",
+    "type": "library",
+    "require": {
+        "topthink/framework": "^8.0",
+        "topthink/think-orm": "^3.0",
+        "topthink/think-migration": "^3.1"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "think\\saas\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "JaguarJack",
+            "email": "njphper@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}
