@@ -4,6 +4,9 @@ use think\saas\models\Tenant;
 use think\saas\models\Domain;
 
 return [
+    // 是否是单数据库模型
+    'is_single_database' => true,
+
     // 租户 ID 字段
     'tenant_id' => 'tenant_id',
 
