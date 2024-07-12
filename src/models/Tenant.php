@@ -10,5 +10,26 @@ class Tenant extends Model implements TenantContract
 {
     use HasDomains, HasDatabase;
 
+    protected $json = ['database'];
 
+    /**
+     * 保存租户信息
+     *
+     * @param array $data
+     * @return int
+     */
+    public function store(array $data) : int
+    {
+        // 创建租户
+        $this->save($data);
+
+        // 创建租户数据库信息
+        $pk = $this->getKey();
+        if ($pk) {
+            $this->database = $this->database()->getConfig();
+            $this->save();
+        }
+
+        return $pk;
+    }
 }

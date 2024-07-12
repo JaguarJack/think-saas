@@ -12,6 +12,6 @@ trait HasTenant
      */
     public function tenant(): BelongsTo
     {
-        return $this->belongsTo(Tenant::class, 'id', 'tenant_id');
+        return $this->belongsTo(Tenant::class, 'tenant_id', 'id');
     }
 }

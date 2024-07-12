@@ -7,157 +7,108 @@ namespace think\saas\support;
 
 use think\helper\Str;
 use think\Model;
+use think\saas\events\CreateTenantDatabaseName;
+use think\saas\events\CreateTenantDatabasePassword;
+use think\saas\events\CreateTenantDatabaseUsername;
+use think\saas\events\UpdateTenantDatabaseConfig;
 use think\saas\models\Tenant;
 
 class DatabaseConfig
 {
     /** @var Tenant|Model */
-    public $tenant;
-
-    /** @var callable */
-    public static $usernameGenerator;
-
-    /** @var callable */
-    public static $passwordGenerator;
-
-    /** @var callable */
-    public static $databaseNameGenerator;
-
-    public static function __constructStatic(): void
-    {
-        static::$usernameGenerator = static::$usernameGenerator ?? function (Tenant $tenant) {
-            return Str::random(16);
-        };
-
-        static::$passwordGenerator = static::$passwordGenerator ?? function (Tenant $tenant) {
-            return Hash::make(Str::random(32));
-        };
-
-        static::$databaseNameGenerator = static::$databaseNameGenerator ?? function (Tenant $tenant) {
-            return config('tenancy.database.prefix') . $tenant->getTenantKey() . config('tenancy.database.suffix');
-        };
-    }
+    public Model|Tenant $tenant;
 
     public function __construct(Tenant $tenant)
     {
-        static::__constructStatic();
-
         $this->tenant = $tenant;
     }
 
-    public static function generateDatabaseNamesUsing(callable $databaseNameGenerator): void
+    public function getDatabaseName(): ?string
     {
-        static::$databaseNameGenerator = $databaseNameGenerator;
+        return $this->tenant->database['database'] ?? null;
     }
 
-    public static function generateUsernamesUsing(callable $usernameGenerator): void
+    public function getDatabaseUsername(): ?string
     {
-        static::$usernameGenerator = $usernameGenerator;
+        return $this->tenant->database['username'] ?? null;
     }
 
-    public static function generatePasswordsUsing(callable $passwordGenerator): void
+    public function getDatabasePassword(): ?string
     {
-        static::$passwordGenerator = $passwordGenerator;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->tenant->getInternal('db_name') ?? (static::$databaseNameGenerator)($this->tenant);
-    }
-
-    public function getUsername(): ?string
-    {
-        return $this->tenant->getInternal('db_username') ?? null;
-    }
-
-    public function getPassword(): ?string
-    {
-        return $this->tenant->getInternal('db_password') ?? null;
+        return $this->tenant->database['password'] ?? null;
     }
 
     /**
-     * Generate DB name, username & password and write them to the tenant model.
+     * 创建数据库名称
      *
-     * @return void
+     * 数据库名称默认使用[随机字符_租户ID]
+     * @return string
      */
-    public function makeCredentials(): void
+    public function createTenantDatabaseName(): string
     {
-        $this->tenant->setInternal('db_name', $this->getName() ?? (static::$databaseNameGenerator)($this->tenant));
-
-        if ($this->manager() instanceof ManagesDatabaseUsers) {
-            $this->tenant->setInternal('db_username', $this->getUsername() ?? (static::$usernameGenerator)($this->tenant));
-            $this->tenant->setInternal('db_password', $this->getPassword() ?? (static::$passwordGenerator)($this->tenant));
+        if (app()->event->hasListener(CreateTenantDatabaseName::class)) {
+            return event(new CreateTenantDatabaseName());
         }
 
-        if ($this->tenant->exists) {
-            $this->tenant->save();
-        }
-    }
-
-    public function getTemplateConnectionName(): string
-    {
-        return $this->tenant->getInternal('db_connection')
-            ?? config('tenancy.database.template_tenant_connection')
-            ?? config('tenancy.database.central_connection');
+        return 'tenant_database_' . $this->tenant->id;
     }
 
     /**
-     * Tenant's own database connection config.
+     * 创建用户名称
+     *
+     * 随机小写字母 + 用户ID
+     *
+     * @return string
      */
-    public function connection(): array
+    public function createTenantDatabaseUsername(): string
     {
-        $template = $this->getTemplateConnectionName();
-        $templateConnection = config("database.connections.{$template}");
+        if (app()->event->hasListener(CreateTenantDatabaseUsername::class)) {
+            return event(new CreateTenantDatabaseUsername());
+        }
 
-        return $this->manager()->makeConnectionConfig(
-            array_merge($templateConnection, $this->tenantConfig()), $this->getName()
-        );
+        return Str::random(rand(6, 12), 3) . $this->tenant->id;
     }
 
     /**
-     * Additional config for the database connection, specific to this tenant.
+     * 创建数据库密码
+     *
+     * @return string
      */
-    public function tenantConfig(): array
+    public function createTenantDatabasePassword(): string
     {
-        $dbConfig = array_filter(array_keys($this->tenant->getAttributes()), function ($key) {
-            return Str::startsWith($key, $this->tenant->internalPrefix() . 'db_');
-        });
-
-        // Remove DB name because we set that separately
-        if (($pos = array_search($this->tenant->internalPrefix() . 'db_name', $dbConfig)) !== false) {
-            unset($dbConfig[$pos]);
+        if (app()->event->hasListener(CreateTenantDatabasePassword::class)) {
+            return event(new CreateTenantDatabasePassword());
         }
 
-        // Remove DB connection because that's not used inside the array
-        if (($pos = array_search($this->tenant->internalPrefix() . 'db_connection', $dbConfig)) !== false) {
-            unset($dbConfig[$pos]);
-        }
-
-        return array_reduce($dbConfig, function ($config, $key) {
-            return array_merge($config, [
-                Str::substr($key, strlen($this->tenant->internalPrefix() . 'db_')) => $this->tenant->getAttribute($key),
-            ]);
-        }, []);
+        return Str::random(rand(12, 18));
     }
 
     /**
-     * Get the TenantDatabaseManager for this tenant's connection.
+     * create database config
+     *
+     * @return mixed
      */
-    public function manager(): TenantDatabaseManager
+    public function getConfig(): mixed
     {
-        $driver = config("database.connections.{$this->getTemplateConnectionName()}.driver");
+        // $default Config
+        $defaultConfig = config('database.connections.mysql');
+        // 初始化租户的数据库
+        $defaultConfig['database'] = $this->createTenantDatabaseName();
+        // $defaultConfig['username'] = $this->createTenantDatabaseUsername();
+        // $defaultConfig['password'] = $this->createTenantDatabasePassword();
 
-        $databaseManagers = config('tenancy.database.managers');
-
-        if (!array_key_exists($driver, $databaseManagers)) {
-            throw new DatabaseManagerNotRegisteredException($driver);
+        // 事件处理
+        $event = app()->event;
+        if ($event->hasListener(UpdateTenantDatabaseConfig::class)) {
+            return event(new UpdateTenantDatabaseConfig($defaultConfig));
         }
 
-        /** @var TenantDatabaseManager $databaseManager */
-        $databaseManager = app($databaseManagers[$driver]);
+        return $defaultConfig;
+    }
 
-        $databaseManager->setConnection($this->getTemplateConnectionName());
 
-        return $databaseManager;
+    public function createDatabase()
+    {
+
     }
 }

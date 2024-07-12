@@ -3,12 +3,14 @@ namespace think\saas;
 
 use think\event\HttpRun;
 use think\saas\commands\InstallSaas;
-use think\saas\contracts\DomainContract;
-use think\saas\contracts\TenantContract;
+use think\saas\events\InitializeTenantDatabase;
+use think\saas\events\InitializeTenantDatabaseData;
+use think\saas\listeners\InitializeTenantDatabaseListener;
+use think\saas\managers\DbManager;
 use think\Service;
 use think\saas\listeners\HttpRunListener;
-use think\saas\models\Domain;
 use think\saas\models\Tenant;
+use think\saas\listeners\InitializeTenantDatabaseDataListener;
 
 class SaasService extends Service
 {
@@ -22,11 +24,16 @@ class SaasService extends Service
         $this->eventListen();
     }
 
-    public function register()
+    public function register(): void
     {
-        $this->app->bind(DomainContract::class, config('saas.domain_model', Domain::class));
+        // 绑定租户单例
+        $this->app->bind(Tenant::class, Tenant::class);
+        // 重新绑定DB对象
+        $this->app->bind('db', DbManager::class);
 
-        $this->app->bind(TenantContract::class, config('saas.tenant_model', Tenant::class));
+        // 接管框架相关核心
+        $this->app->bind('db', DbManager::class);
+        $this->app->bind('think\DbManager', DbManager::class);
     }
 
 
@@ -35,11 +42,13 @@ class SaasService extends Service
      *
      * @return void
      */
-    protected function eventListen()
+    protected function eventListen(): void
     {
         $this->app->loadEvent([
             'listen' => [
                 HttpRun::class => [HttpRunListener::class],
+                InitializeTenantDatabase::class => [InitializeTenantDatabaseListener::class],
+                InitializeTenantDatabaseData::class => [InitializeTenantDatabaseDataListener::class]
             ]
         ]);
     }

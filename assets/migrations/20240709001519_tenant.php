@@ -30,6 +30,8 @@ class Tenant extends Migrator
     {
         $table = $this->table('tenant');
         $table->addColumn('name', 'string', ['limit' => 255, 'default' => ''])
+            ->addColumn('description', 'string', ['limit' => 1000, 'default' => ''])
+            ->addColumn('database', 'json', ['null' => true])
             ->addColumn('created_at', 'integer', ['default' => 0])
             ->addColumn('updated_at', 'datetime', ['null' => true])
             ->create();

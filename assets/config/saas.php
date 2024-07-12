@@ -4,6 +4,11 @@ use think\saas\models\Tenant;
 use think\saas\models\Domain;
 
 return [
+     // 总台 host 集合
+    'hosts' => [
+
+     ],
+
     // 是否是单数据库模型
     'is_single_database' => true,
 
