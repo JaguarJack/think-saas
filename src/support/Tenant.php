@@ -51,21 +51,21 @@ class Tenant
      */
     public function initialize(mixed $tenant): void
     {
-        // 已经初始化了
-        if ($this->initialized) {
-            // 如果是当前租户 则直接返回
-            if ($this->tenantId === $tenant->getKey()) {
-                return;
-            }
-
-            $this->tenant = null;
-        }
-
         $tenantModel = $this->model();
         if ($tenant instanceof $tenantModel) {
             $this->tenant = $tenant;
         } else {
             $this->tenant = $tenantModel->find($tenant);
+        }
+
+        // 已经初始化了
+        if ($this->initialized) {
+            // 如果是当前租户 则直接返回
+            if ($this->tenantId ===  $this->tenant->getKey()) {
+                return;
+            }
+
+            $this->tenant = null;
         }
 
         if (! $this->tenant) {
@@ -81,9 +81,9 @@ class Tenant
     }
 
     /**
-     * @return Model
+     * @return mixed
      */
-    public function model(): Model
+    public function model(): mixed
     {
         /* @var Model $tenantModel */
         return app(config('saas.tenant_model'));
@@ -307,5 +307,14 @@ class Tenant
         $this->tenant = null;
 
         $this->tenantId = 0;
+    }
+
+    /**
+     * @param string $separator
+     * @return string
+     */
+    public function tenantPrefix(string $separator = ':'): string
+    {
+        return 'tenant'. $separator . $this->tenantId;
     }
 }

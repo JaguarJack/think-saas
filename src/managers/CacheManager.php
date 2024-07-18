@@ -1,48 +1,43 @@
 <?php
 namespace think\saas\managers;
 
+use think\App;
 use think\Cache;
 use think\saas\support\Tenant;
 
 class CacheManager extends Cache
 {
     /**
-     * 获取缓存配置
-     * @access public
-     * @param null|string $name    名称
-     * @param mixed       $default 默认值
-     * @return mixed
+     * @param App $app
      */
-    public function getConfig(string $name = null, $default = null): mixed
+    public function __construct(
+        protected App $app
+    )
     {
-        if (!is_null($name)) {
-            return $this->addTenantPrefix($this->app->config->get('cache.' . $name, $default));
-        }
+        parent::__construct($app);
 
-        return $this->addTenantPrefix($this->app->config->get('cache'));
+        $this->addTenantPrefix();
     }
 
     /**
      * 添加租户前缀
      *
-     * @param $config
-     * @return mixed
+     * @return void
      */
-    protected function addTenantPrefix($config): mixed
+    protected function addTenantPrefix(): void
     {
         $tenantPrefix = $this->app->get(Tenant::class)->tenantPrefix();
+
+        $config = $this->app->config->get('cache');
 
         if (isset($config['stores'])) {
             foreach ($config['stores'] as &$store) {
                 $store['prefix'] = $this->addPrefixIfNotSet($tenantPrefix, $store['prefix']);
                 $store['tag_prefix'] = $this->addPrefixIfNotSet($tenantPrefix, $store['tag_prefix']);
             }
-        } else {
-            $config['prefix'] = $this->addPrefixIfNotSet($tenantPrefix, $config['prefix']);
-            $config['tag_prefix'] = $this->addPrefixIfNotSet($tenantPrefix, $config['tag_prefix']);
         }
 
-        return $config;
+        $this->app->config->set($config, 'cache');
     }
 
     /**

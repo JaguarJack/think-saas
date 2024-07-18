@@ -11,19 +11,32 @@ use think\Service;
 use think\saas\listeners\HttpRunListener;
 use think\saas\models\Tenant;
 use think\saas\listeners\InitializeTenantDatabaseDataListener;
+use think\saas\managers\SessionManager;
+use think\saas\managers\LogManager;
+use think\saas\managers\CookieManager;
+use think\saas\managers\CacheManager;
 
 class SaasService extends Service
 {
-    public function boot()
+    /**
+     * boot
+     *
+     * @return void
+     */
+    public function boot(): void
     {
         $this->commands([
             InstallSaas::class
         ]);
 
-
         $this->eventListen();
     }
 
+    /**
+     * register
+     *
+     * @return void
+     */
     public function register(): void
     {
         // 绑定租户单例
@@ -34,8 +47,18 @@ class SaasService extends Service
         // 接管框架相关核心
         $this->app->bind('db', DbManager::class);
         $this->app->bind('think\DbManager', DbManager::class);
+        // session 接管
+        $this->app->bind('session', SessionManager::class);
+        // 日志 接管
+        $this->app->bind('log', LogManager::class);
+        $this->app->bind('think\LogManager', LogManager::class);
+        $this->app->bind('Psr\Log\LoggerInterface', LogManager::class);
+        // 缓存接管
+        $this->app->bind('cache', CacheManager::class);
+        $this->app->bind('think\CacheManager', CacheManager::class);
+        // cookie 接管
+        $this->app->bind('cookie', CookieManager::class);
     }
-
 
     /**
      * 事件监听
