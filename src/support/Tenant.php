@@ -311,10 +311,10 @@ class Tenant
 
     /**
      * @param string $separator
-     * @return string
+     * @return string|null
      */
-    public function tenantPrefix(string $separator = ':'): string
+    public function tenantPrefix(string $separator = ':'): ?string
     {
-        return 'tenant'. $separator . $this->tenantId;
+        return $this->tenantId ? ('tenant'. $separator . $this->tenantId) : 'tenant';
     }
 }

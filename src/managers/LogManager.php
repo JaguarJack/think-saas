@@ -26,7 +26,7 @@ class LogManager extends Log
      */
     protected function addTenantPrefix(): void
     {
-        $tenantPrefix = $this->app->get(Tenant::class)->tenantPrefix('');
+        $tenantPrefix = $this->app->get('tenant')->tenantPrefix('');
 
         $config = $this->app->config->get('log');
 
