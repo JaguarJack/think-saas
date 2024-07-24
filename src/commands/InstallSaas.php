@@ -5,6 +5,7 @@ use think\console\Command;
 use think\console\Input;
 use think\console\input\Option;
 use think\console\Output;
+use think\saas\support\sync\Schema;
 
 
 class InstallSaas extends Command
@@ -18,6 +19,8 @@ class InstallSaas extends Command
 
     public function execute(Input $input, Output $output)
     {
+        $schema = new Schema();
+        dd($schema->getOriginTablesStructure());
         // 发布文件
         $this->publishConfig();
         $this->publishMigrations();

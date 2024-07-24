@@ -8,6 +8,7 @@ use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
 use think\saas\exceptions\CreateDatabaseFailed;
 use think\saas\exceptions\TenantNotFoundException;
+use think\saas\managers\Manager;
 use think\saas\support\Tenant;
 
 /**
@@ -38,5 +39,8 @@ class HttpRunListener
         }
         // 租户初始化
         app(Tenant::class)->initialize(app(config('saas.domain_model'))->getTenant($host));
+
+        // 重新绑定核心
+        app(Manager::class)->reBind();
     }
 }

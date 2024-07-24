@@ -2,82 +2,128 @@
 namespace think\saas\support\sync;
 
 
+use think\db\ConnectionInterface;
 use think\facade\Db;
 
 class Schema
 {
-    public function __construct(protected string $tableName = '')
+    public function __construct(
+        protected string $originConnect = 'mysql',
+        protected string $targetConnect = 'tenant'
+    ){}
+
+    /**
+     * 获取主应用表结构
+     *
+     * @return array
+     */
+    public function getTablesFields(): array
     {
+        $tables = $this->getOriginConnect()->getTables();
 
-    }
+        // 配置需要同步的表
+        $syncTables = config('saas.sync.schema.tables');
 
+        if ($syncTables && $syncTables != '*') {
+            foreach ($tables as $k => $table) {
+                if (!in_array($table, $syncTables)) {
+                    unset($tables[$k]);
+                }
+            }
+        }
 
-    public function setTable(string $tableName): static
-    {
-        $this->tableName = $tableName;
-
-        return $this;
-    }
-
-    public function getOriginTablesStructure(): array
-    {
-        $tables = Db::connect('mysql')->getTables();
-
-        $structures = [];
+        $tablesFields = [];
 
         foreach ($tables as $table) {
-            $structures[] =$this->generateCreateTableSQL($table);
+            $tableFields = $this->getTableFields($table);
+            $tablesFields[$table] = $tableFields;
         }
 
-        return $structures;
+        return $tablesFields;
     }
 
 
-    protected function generateCreateTableSQL($tableName): string
+    /**
+     * @param $tableName
+     * @return array
+     */
+    protected function getTableFields($tableName): array
     {
-        $fields = Db::connect('mysql')->getFields($tableName);
+        $fields = $this->getOriginConnect()->getFields($tableName);
 
-        $sql = "CREATE TABLE `$tableName` ( \n";
-        $primaryKey = null;
+        // 需要同步的表字段
+        $syncTableFields = config('saas.sync.schema.fields');
 
-        foreach ($fields as $field => $info) {
-            $sql .= "  `$field` " . $info['type'];
-
-            if ($info['primary']) {
-                $primaryKey = $field;
+        // fields
+        foreach ($fields as $k => $field) {
+            if (! isset($syncTableFields[$tableName])) {
+                break;
             }
 
-            if ($info['notnull']) {
-                $sql .= " NOT NULL";
+            $syncFields = $syncTableFields[$tableName];
+            if (!is_array($syncFields)) {
+                $syncFields = explode(',', $syncFields);
             }
 
-            if ($info['autoinc']) {
-                $sql .= " AUTO_INCREMENT";
+            if (!in_array($field['name'], $syncFields)) {
+                unset($fields[$k]);
             }
-
-            if ($info['default'] !== null) {
-                $sql .= " DEFAULT '" . $info['default'] . "'";
-            }
-
-            $sql .= ",\n";
         }
 
-        if ($primaryKey) {
-            $sql .= "  PRIMARY KEY (`$primaryKey`)\n";
-        } else {
-            // 移除最后一个字段定义后的逗号
-            $sql = rtrim($sql, ",\n") . "\n";
-        }
-
-        $charset = Db::connect('mysql')->getConfig('charset');
-
-        $sql .= ") ENGINE=InnoDB DEFAULT CHARSET={$charset} COLLATE={$charset}_unicode_ci;";
-
-        return $sql;
+        return $fields;
     }
 
-    protected function changeToMasterDatabase()
+    /**
+     *
+     * 同步到租户数据库
+     *
+     * @return void
+     */
+    protected function syncToTenantDatabase(): void
     {
+        $tablesFields = $this->getTablesFields();
 
+        $charset = $this->getOriginConnect()->getConfig('charset');
+
+        $structures = [];
+        foreach ($tablesFields as $table => $fields) {
+            $structures[] = (new CreateTableSQL($table, $charset))->generate($fields);
+        }
+
+        foreach ($structures as $structure) {
+            $this->getTargetConnect()->execute($structure);
+        }
+    }
+
+    /**
+     * 同步数据
+     *
+     * @return void
+     */
+    protected function syncToTenantDatabaseData(): void
+    {
+        $tablesFields = $this->getTablesFields();
+
+        foreach ($tablesFields as $table => $fields) {
+            $tableData = new TableData($this->originConnect, $this->targetConnect);
+
+            $tableData->sync($table, $fields);
+        }
+    }
+
+    /**
+     * @return ConnectionInterface
+     */
+    protected function getOriginConnect(): ConnectionInterface
+    {
+        return Db::connect($this->originConnect);
+    }
+
+    /**
+     * @return ConnectionInterface
+     */
+    protected function getTargetConnect(): ConnectionInterface
+    {
+        return Db::connect($this->targetConnect);
     }
 }

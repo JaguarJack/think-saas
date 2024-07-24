@@ -90,7 +90,6 @@ class Tenant
     }
 
     /**
-     *
      * 创建租户
      *
      * @param array $data
