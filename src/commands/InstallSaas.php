@@ -1,13 +1,20 @@
 <?php
+// +----------------------------------------------------------------------
+// | Think SaaS 开源软件
+// +----------------------------------------------------------------------
+// | CatchAdmin [ WE CAN DO IT JUST THINK ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2024~2030 https://catchadmin.com/ All rights reserved.
+// +----------------------------------------------------------------------
+// | Author: JaguarJack <njphper@gmail.com>
+// +----------------------------------------------------------------------
+
 namespace think\saas\commands;
 
 use think\console\Command;
 use think\console\Input;
-use think\console\input\Option;
 use think\console\Output;
-use think\saas\support\sync\Schema;
-
-
+use think\saas\support\sync\multi\Schema;
 class InstallSaas extends Command
 {
 
