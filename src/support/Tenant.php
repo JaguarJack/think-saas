@@ -238,7 +238,7 @@ class Tenant
      */
     public function isSingleDatabase(): bool
     {
-        return config('saas.is_single_database', false);
+        return config('saas.mode.is_single_database', false);
     }
 
 
@@ -249,6 +249,7 @@ class Tenant
      */
     public function connectDatabase(): void
     {
+        // 单库无需切换
         if ($this->isSingleDatabase()) {
             return;
         }
@@ -261,6 +262,15 @@ class Tenant
         $connections = $config->get('database.connections', []);
         $connections['tenant'] = (array) $this->tenant->database;
 
+        // 这里劫持 SaasQuery 类劫持
+        $saasQuery = $config->get('saas.query');
+        if ($saasQuery) {
+            foreach ($connections as $connection) {
+                $connection['query'] = $saasQuery;
+            }
+        }
+
+        // 设置 database 配置
         $config->set([
             'connections' => $connections,
         ], 'database');

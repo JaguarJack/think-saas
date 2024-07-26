@@ -23,7 +23,7 @@ class InitializeTenancyByDomain
      * @return mixed
      * @throws \Exception
      */
-    public function handle(Request $request, \Closure $next)
+    public function handle(Request $request, \Closure $next): mixed
     {
         $host = $request->host();
 

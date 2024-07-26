@@ -5,16 +5,13 @@ use think\event\HttpRun;
 use think\saas\commands\InstallSaas;
 use think\saas\events\InitializeTenantDatabase;
 use think\saas\events\InitializeTenantDatabaseData;
+use think\saas\events\SaasBeforeInsert;
 use think\saas\listeners\InitializeTenantDatabaseListener;
-use think\saas\managers\DbManager;
 use think\Service;
 use think\saas\listeners\HttpRunListener;
 use think\saas\support\Tenant;
 use think\saas\listeners\InitializeTenantDatabaseDataListener;
-use think\saas\managers\SessionManager;
-use think\saas\managers\LogManager;
-use think\saas\managers\CookieManager;
-use think\saas\managers\CacheManager;
+use think\saas\listeners\SaasBeforeInsertListener;
 
 class SaasService extends Service
 {
@@ -51,11 +48,7 @@ class SaasService extends Service
     protected function eventListen(): void
     {
         $this->app->loadEvent([
-            'listen' => [
-                HttpRun::class => [HttpRunListener::class],
-                InitializeTenantDatabase::class => [InitializeTenantDatabaseListener::class],
-                InitializeTenantDatabaseData::class => [InitializeTenantDatabaseDataListener::class]
-            ]
+            'listen' => config('saas.listeners', []),
         ]);
     }
 }
