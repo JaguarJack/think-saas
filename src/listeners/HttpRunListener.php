@@ -17,7 +17,6 @@ namespace think\saas\listeners;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
-use think\saas\exceptions\CreateDatabaseFailed;
 use think\saas\exceptions\TenantNotFoundException;
 use think\saas\managers\Manager;
 use think\saas\support\Tenant;
@@ -33,16 +32,10 @@ class HttpRunListener
      * @throws TenantNotFoundException
      * @throws DataNotFoundException
      * @throws ModelNotFoundException
-     * @throws DbException|CreateDatabaseFailed
+     * @throws DbException
      */
-    public function handle($event): void
+    public function handle(): void
     {
-        // dd(app(Tenant::class)->createDatabase(1));
-        // 这里来处理租户，因为这是应用最早启动的时候
-        // 因为此时配置文件已经加载
-        // 所以这里可以从主库获取数据
-        // 然后保存到缓存中
-        // 获取 host
         /* @var Tenant $tenant*/
         $tenant = app()->make('tenant');
         // 非单库模式
@@ -50,7 +43,7 @@ class HttpRunListener
             $currentTenant = $this->getTenant();
             if ($currentTenant) {
                 // 租户初始化
-                app(Tenant::class)->initialize($currentTenant);
+                $tenant->initialize($currentTenant);
 
                 // 重新绑定核心
                 app(Manager::class)->reBind();
