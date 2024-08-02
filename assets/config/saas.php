@@ -132,5 +132,16 @@ return [
      *
      * 将会由扩展自动维护
      */
-    'query' => \think\saas\support\SaasQuery::class
+    'query' => \think\saas\support\SaasQuery::class,
+
+    /**
+     * 设置 UUID 字段
+     *
+     * uuid 针对多租户数据隔离
+     *
+     * 注意，使用 uuid 的情况下，主键请使用该字段
+     *
+     * uuid 代替自增 ID
+     */
+    'uuid' => 'id',
 ];
