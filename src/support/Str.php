@@ -10,14 +10,31 @@
 // | Author: JaguarJack <njphper@gmail.com>
 // +----------------------------------------------------------------------
 
-declare(strict_types=1);
-
 namespace think\saas\support;
 
-use think\db\Query;
-use think\saas\support\traits\SaaSQueryTrait;
 
-class SaasQuery extends Query
+use Ramsey\Uuid\Codec\TimestampFirstCombCodec;
+use Ramsey\Uuid\Generator\CombGenerator;
+use Ramsey\Uuid\UuidFactory;
+
+class Str
 {
-    use SaaSQueryTrait;
+    /**
+     * @return string
+     */
+    public static function uuid(): string
+    {
+        $factory = new UuidFactory;
+
+        $factory->setRandomGenerator(new CombGenerator(
+            $factory->getRandomGenerator(),
+            $factory->getNumberConverter()
+        ));
+
+        $factory->setCodec(new TimestampFirstCombCodec(
+            $factory->getUuidBuilder()
+        ));
+
+        return (string) $factory->uuid4();
+    }
 }

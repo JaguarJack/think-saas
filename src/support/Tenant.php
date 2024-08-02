@@ -69,7 +69,7 @@ class Tenant
         }
 
         // 已经初始化了
-        if ($this->initialized) {
+        if ($this->isInitialized()) {
             // 如果是当前租户 则直接返回
             if ($this->tenantId ===  $this->tenant->getKey()) {
                 return;
@@ -88,6 +88,14 @@ class Tenant
 
         // 链接数据库
         $this->connectDatabase();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInitialized(): bool
+    {
+        return $this->initialized;
     }
 
     /**

@@ -14,6 +14,9 @@ namespace think\saas\commands;
 use think\console\Command;
 use think\console\Input;
 use think\console\Output;
+use think\facade\Db;
+use think\saas\models\Tenant;
+use think\saas\support\Str;
 use think\saas\support\sync\multi\Schema;
 class InstallSaas extends Command
 {
@@ -24,15 +27,25 @@ class InstallSaas extends Command
             ->setDescription('saas 安装');
     }
 
+    /**
+     * 执行
+     *
+     * @param Input $input
+     * @param Output $output
+     * @return void
+     */
     public function execute(Input $input, Output $output)
     {
-        $schema = new Schema();
-        dd($schema->getOriginTablesStructure());
         // 发布文件
         $this->publishConfig();
         $this->publishMigrations();
     }
 
+    /**
+     * 发布配置
+     *
+     * @return void
+     */
     protected function publishConfig(): void
     {
         $target = $this->app->getRootPath() . 'config' . DIRECTORY_SEPARATOR . 'saas.php';
@@ -44,6 +57,11 @@ class InstallSaas extends Command
         );
     }
 
+    /**
+     * 发布 migrations
+     *
+     * @return void
+     */
     protected function publishMigrations(): void
     {
         $migrationsPath = dirname(__DIR__, 2). DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'migrations';
@@ -57,6 +75,11 @@ class InstallSaas extends Command
         }
     }
 
+    /**
+     * @param $source
+     * @param $target
+     * @return bool|int
+     */
     protected function publish($source, $target): bool|int
     {
         return file_put_contents($target, file_get_contents($source));
