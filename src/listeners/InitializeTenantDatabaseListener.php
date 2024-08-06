@@ -10,7 +10,7 @@
 // | Author: JaguarJack <njphper@gmail.com>
 // +----------------------------------------------------------------------
 
-namespace think\saas\listeners;
+namespace catch\saas\listeners;
 class InitializeTenantDatabaseListener
 {
     public function handle()

@@ -9,15 +9,13 @@
 // | Author: JaguarJack <njphper@gmail.com>
 // +----------------------------------------------------------------------
 
-declare(strict_types=1);
+namespace catch\saas\models\traits;
 
-namespace catch\saas\events;
-
-class SaasBeforeInsert
+use think\model\relation\BelongsToMany;
+trait HasPermissions
 {
-    public function __construct(
-        public array $data,
-        public bool $multi = false
-    ) {
+    public function permissions(): BelongsToMany
+    {
+        return $this->belongsToMany(config('saas.permission_model'), 'tenant_has_permissions', 'tenant_id', 'permission_id');
     }
 }

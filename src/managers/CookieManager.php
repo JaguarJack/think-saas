@@ -10,10 +10,10 @@
 // +----------------------------------------------------------------------
 
 
-namespace think\saas\managers;
+namespace catch\saas\managers;
 
 use think\Cookie;
-use think\saas\support\Tenant;
+use catch\saas\support\Tenant;
 
 class CookieManager extends Cookie
 {

@@ -3,9 +3,9 @@
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
-use think\saas\support\Tenant;
-use think\saas\exceptions\TenantNotFoundException;
-use think\saas\support\Str;
+use catch\saas\support\Tenant;
+use catch\saas\exceptions\TenantNotFoundException;
+use catch\saas\support\Str;
 
 if (!function_exists('tenant')) {
 

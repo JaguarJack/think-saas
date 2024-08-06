@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace think\saas\support;
+namespace catch\saas\support;
 
 use think\db\Query;
-use think\saas\support\traits\SaaSQueryTrait;
+use catch\saas\support\traits\SaaSQueryTrait;
 
 class SaasQuery extends Query
 {

@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
 
 
-namespace think\saas\support\sync\multi;
+namespace catch\saas\support\sync\multi;
 
 use think\db\ConnectionInterface;
 use think\facade\Db;

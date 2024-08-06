@@ -9,15 +9,15 @@
 // | Author: JaguarJack <njphper@gmail.com>
 // +----------------------------------------------------------------------
 
-namespace think\saas\commands;
+namespace catch\saas\commands;
 
 use think\console\Command;
 use think\console\Input;
 use think\console\Output;
 use think\facade\Db;
-use think\saas\models\Tenant;
-use think\saas\support\Str;
-use think\saas\support\sync\multi\Schema;
+use catch\saas\models\Tenant;
+use catch\saas\support\Str;
+use catch\saas\support\sync\multi\Schema;
 class InstallSaas extends Command
 {
 

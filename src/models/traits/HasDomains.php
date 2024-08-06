@@ -11,10 +11,10 @@
 
 declare(strict_types=1);
 
-namespace think\saas\models\traits;
+namespace catch\saas\models\traits;
 
 use think\model\relation\HasMany;
-use think\saas\models\Domain;
+use catch\saas\models\Domain;
 
 trait HasDomains
 {

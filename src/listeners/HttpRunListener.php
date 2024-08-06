@@ -11,15 +11,15 @@
 // +----------------------------------------------------------------------
 
 
-namespace think\saas\listeners;
+namespace catch\saas\listeners;
 
 // 应用初始化
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
-use think\saas\exceptions\TenantNotFoundException;
-use think\saas\managers\Manager;
-use think\saas\support\Tenant;
+use catch\saas\exceptions\TenantNotFoundException;
+use catch\saas\managers\Manager;
+use catch\saas\support\Tenant;
 
 /**
  * 处理请求开始

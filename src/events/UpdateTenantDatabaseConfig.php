@@ -9,7 +9,7 @@
 // | Author: JaguarJack <njphper@gmail.com>
 // +----------------------------------------------------------------------
 
-namespace think\saas\events;
+namespace catch\saas\events;
 
 class UpdateTenantDatabaseConfig
 {

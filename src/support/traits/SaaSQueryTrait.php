@@ -9,9 +9,9 @@
 // | Author: JaguarJack <njphper@gmail.com>
 // +----------------------------------------------------------------------
 
-namespace think\saas\support\traits;
+namespace catch\saas\support\traits;
 
-use think\saas\events\SaasBeforeInsert;
+use catch\saas\events\SaasBeforeInsert;
 
 /**
  * 复用 Trait

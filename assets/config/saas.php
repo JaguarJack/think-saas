@@ -10,15 +10,16 @@
 // +----------------------------------------------------------------------
 
 use think\event\HttpRun;
-use think\saas\events\InitializeTenantDatabase;
-use think\saas\events\InitializeTenantDatabaseData;
-use think\saas\events\SaasBeforeInsert;
-use think\saas\listeners\HttpRunListener;
-use think\saas\listeners\InitializeTenantDatabaseDataListener;
-use think\saas\listeners\InitializeTenantDatabaseListener;
-use think\saas\listeners\SaasBeforeInsertListener;
-use think\saas\models\Tenant;
-use think\saas\models\Domain;
+use catch\saas\events\InitializeTenantDatabase;
+use catch\saas\events\InitializeTenantDatabaseData;
+use catch\saas\events\SaasBeforeInsert;
+use catch\saas\listeners\HttpRunListener;
+use catch\saas\listeners\InitializeTenantDatabaseDataListener;
+use catch\saas\listeners\InitializeTenantDatabaseListener;
+use catch\saas\listeners\SaasBeforeInsertListener;
+use catch\saas\models\Tenant;
+use catch\saas\models\Domain;
+use catch\saas\support\SaasQuery;
 
 return [
     /**
@@ -68,6 +69,12 @@ return [
      * 租户模型
      */
     'domain_model' => Domain::class,
+
+    /**
+     * 权限模型(菜单模型)
+     */
+    'permission_model' => '',
+
 
     /**
      * 针对多租户模式
@@ -132,7 +139,7 @@ return [
      *
      * 将会由扩展自动维护
      */
-    'query' => \think\saas\support\SaasQuery::class,
+    'query' => SaasQuery::class,
 
     /**
      * 设置 UUID 字段

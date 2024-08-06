@@ -10,7 +10,7 @@
 // | Author: JaguarJack <njphper@gmail.com>
 // +----------------------------------------------------------------------
 
-namespace think\saas\support;
+namespace catch\saas\support;
 
 
 use Ramsey\Uuid\Codec\TimestampFirstCombCodec;

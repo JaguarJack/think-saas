@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
 
 
-namespace think\saas\listeners;
+namespace catch\saas\listeners;
 
 class InitializeTenantDatabaseDataListener
 {

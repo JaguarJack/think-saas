@@ -11,7 +11,7 @@
 // +----------------------------------------------------------------------
 
 
-namespace think\saas\managers;
+namespace catch\saas\managers;
 
 use think\App;
 use think\Log;

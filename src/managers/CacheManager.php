@@ -10,11 +10,11 @@
 // +----------------------------------------------------------------------
 
 
-namespace think\saas\managers;
+namespace catch\saas\managers;
 
 use think\App;
 use think\Cache;
-use think\saas\support\Tenant;
+use catch\saas\support\Tenant;
 
 class CacheManager extends Cache
 {

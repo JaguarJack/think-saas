@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
 
 
-namespace think\saas\support\sync\single;
+namespace catch\saas\support\sync\single;
 
 use think\facade\Db;
 

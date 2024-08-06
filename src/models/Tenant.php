@@ -10,16 +10,17 @@
 // +----------------------------------------------------------------------
 
 
-namespace think\saas\models;
+namespace catch\saas\models;
 
 use think\Model;
-use think\saas\models\traits\HasDatabase;
-use think\saas\models\traits\HasDomains;
-use think\saas\contracts\TenantContract;
+use catch\saas\models\traits\HasDatabase;
+use catch\saas\models\traits\HasDomains;
+use catch\saas\contracts\TenantContract;
+use catch\saas\models\traits\HasPermissions;
 
 class Tenant extends Model implements TenantContract
 {
-    use HasDomains, HasDatabase;
+    use HasDomains, HasDatabase, HasPermissions;
 
     protected $json = ['database'];
 

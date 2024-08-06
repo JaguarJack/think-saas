@@ -10,10 +10,10 @@
 // +----------------------------------------------------------------------
 
 
-namespace think\saas\managers;
+namespace catch\saas\managers;
 
 use think\App;
-use think\saas\support\Tenant;
+use catch\saas\support\Tenant;
 use think\Session;
 
 /**
@@ -23,7 +23,7 @@ use think\Session;
  *
  * Session 主要通过 prefix 做区别
  *
- * @package think\saas\managers
+ * @package catch\saas\managers
  */
 class SessionManager extends Session
 {

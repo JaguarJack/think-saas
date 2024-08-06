@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
 
 
-namespace think\saas\managers;
+namespace catch\saas\managers;
 
 class Manager
 {

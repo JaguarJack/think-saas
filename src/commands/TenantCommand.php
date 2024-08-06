@@ -9,7 +9,7 @@
 // | Author: JaguarJack <njphper@gmail.com>
 // +----------------------------------------------------------------------
 
-namespace think\saas\commands;
+namespace catch\saas\commands;
 
 use think\console\Command;
 use think\console\Input;
@@ -17,8 +17,8 @@ use think\console\Output;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
-use think\saas\exceptions\TenantNotFoundException;
-use think\saas\support\Tenant;
+use catch\saas\exceptions\TenantNotFoundException;
+use catch\saas\support\Tenant;
 
 /**
  * 租户 command 基类

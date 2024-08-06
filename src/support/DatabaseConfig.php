@@ -12,15 +12,15 @@
 
 declare(strict_types=1);
 
-namespace think\saas\support;
+namespace catch\saas\support;
 
 use think\helper\Str;
 use think\Model;
-use think\saas\events\CreateTenantDatabaseName;
-use think\saas\events\CreateTenantDatabasePassword;
-use think\saas\events\CreateTenantDatabaseUsername;
-use think\saas\events\UpdateTenantDatabaseConfig;
-use think\saas\models\Tenant;
+use catch\saas\events\CreateTenantDatabaseName;
+use catch\saas\events\CreateTenantDatabasePassword;
+use catch\saas\events\CreateTenantDatabaseUsername;
+use catch\saas\events\UpdateTenantDatabaseConfig;
+use catch\saas\models\Tenant;
 
 class DatabaseConfig
 {

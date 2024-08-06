@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
 
 
-namespace think\saas\exceptions;
+namespace catch\saas\exceptions;
 
 class CreateDatabaseFailed extends SaasException
 {

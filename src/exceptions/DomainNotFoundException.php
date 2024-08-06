@@ -10,7 +10,7 @@
 // | Author: JaguarJack <njphper@gmail.com>
 // +----------------------------------------------------------------------
 
-namespace think\saas\exceptions;
+namespace catch\saas\exceptions;
 
 class DomainNotFoundException extends SaasException
 {

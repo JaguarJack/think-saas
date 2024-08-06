@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace think\saas\support;
+namespace catch\saas\support;
 
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
@@ -19,11 +19,11 @@ use think\db\exception\ModelNotFoundException;
 use think\facade\Db;
 use think\facade\Log;
 use think\Model;
-use think\saas\events\GetTenants;
-use think\saas\events\InitializeTenantDatabase;
-use think\saas\events\InitializeTenantDatabaseData;
-use think\saas\exceptions\CreateDatabaseFailed;
-use think\saas\exceptions\TenantNotFoundException;
+use catch\saas\events\GetTenants;
+use catch\saas\events\InitializeTenantDatabase;
+use catch\saas\events\InitializeTenantDatabaseData;
+use catch\saas\exceptions\CreateDatabaseFailed;
+use catch\saas\exceptions\TenantNotFoundException;
 
 /**
  * 租户

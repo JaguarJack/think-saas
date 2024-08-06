@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace think\saas\support;
+namespace catch\saas\support;
 
 class Tree
 {

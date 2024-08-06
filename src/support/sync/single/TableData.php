@@ -9,11 +9,11 @@
 // | Author: JaguarJack <njphper@gmail.com>
 // +----------------------------------------------------------------------
 
-namespace think\saas\support\sync\single;
+namespace catch\saas\support\sync\single;
 
 use Generator;
 use think\Db;
-use think\saas\support\Tree;
+use catch\saas\support\Tree;
 
 /**
  * 单库数据同步

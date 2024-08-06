@@ -9,7 +9,7 @@
 // | Author: JaguarJack <njphper@gmail.com>
 // +----------------------------------------------------------------------
 
-namespace think\saas\support\sync\multi;
+namespace catch\saas\support\sync\multi;
 
 class CreateTableSQL
 {

@@ -9,7 +9,7 @@
 // | Author: JaguarJack <njphper@gmail.com>
 // +----------------------------------------------------------------------
 
-namespace think\saas\contracts;
+namespace catch\saas\contracts;
 
 interface DomainContract
 {

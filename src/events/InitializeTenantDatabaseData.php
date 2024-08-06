@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
 
 
-namespace think\saas\events;
+namespace catch\saas\events;
 
 class InitializeTenantDatabaseData
 {

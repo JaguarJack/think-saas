@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace think\saas\models\traits;
+namespace catch\saas\models\traits;
 
 
-use think\saas\support\DatabaseConfig;
+use catch\saas\support\DatabaseConfig;
 
 trait HasDatabase
 {

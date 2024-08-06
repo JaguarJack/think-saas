@@ -1,16 +1,20 @@
 {
-    "name": "think/saas",
+    "name": "catch/saas",
     "description": "a saas package for thinkphp 8.0",
     "type": "library",
     "require": {
         "topthink/framework": "^8.0",
         "topthink/think-orm": "^3.0",
-        "topthink/think-migration": "^3.1"
+        "topthink/think-migration": "^3.1",
+        "ramsey/uuid": "^4.7"
     },
     "license": "MIT",
     "autoload": {
+        "files": [
+            "src/support/helper.php"
+        ],
         "psr-4": {
-            "think\\saas\\": "src/"
+            "catch\\saas\\": "src/"
         }
     },
     "authors": [
@@ -22,7 +26,7 @@
     "extra": {
         "think": {
             "services": [
-                "think\\saas\\SaasService"
+                "catch\\saas\\SaasService"
             ]
         }
     },

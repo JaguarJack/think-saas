@@ -10,16 +10,16 @@
 // +----------------------------------------------------------------------
 
 
-namespace think\saas\models;
+namespace catch\saas\models;
 
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
 use think\model;
-use think\saas\contracts\DomainContract;
-use think\saas\exceptions\TenantNotFoundException;
-use think\saas\models\traits\HasTenant;
-use think\saas\exceptions\DomainNotFoundException;
+use catch\saas\contracts\DomainContract;
+use catch\saas\exceptions\TenantNotFoundException;
+use catch\saas\models\traits\HasTenant;
+use catch\saas\exceptions\DomainNotFoundException;
 
 class Domain extends Model implements DomainContract
 {

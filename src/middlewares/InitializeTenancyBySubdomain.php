@@ -10,10 +10,10 @@
 // +----------------------------------------------------------------------
 
 
-namespace think\saas\middlewares;
+namespace catch\saas\middlewares;
 
 use think\Request;
-use think\saas\contracts\DomainContract;
+use catch\saas\contracts\DomainContract;
 
 class InitializeTenancyByDomain
 {

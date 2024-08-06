@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace think\saas\managers;
+namespace catch\saas\managers;
 
 use think\Db;
 use think\db\ConnectionInterface;

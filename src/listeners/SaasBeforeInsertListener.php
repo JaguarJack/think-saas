@@ -11,11 +11,11 @@
 // +----------------------------------------------------------------------
 
 
-namespace think\saas\listeners;
+namespace catch\saas\listeners;
 
-use think\saas\events\SaasBeforeInsert;
-use think\saas\exceptions\TenantNotFoundException;
-use think\saas\support\Tenant;
+use catch\saas\events\SaasBeforeInsert;
+use catch\saas\exceptions\TenantNotFoundException;
+use catch\saas\support\Tenant;
 
 /**
  * 处理请求开始

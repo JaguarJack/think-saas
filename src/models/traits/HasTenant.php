@@ -9,10 +9,10 @@
 // | Author: JaguarJack <njphper@gmail.com>
 // +----------------------------------------------------------------------
 
-namespace think\saas\models\traits;
+namespace catch\saas\models\traits;
 
 use think\model\relation\BelongsTo;
-use think\saas\models\Tenant;
+use catch\saas\models\Tenant;
 
 trait HasTenant
 {
